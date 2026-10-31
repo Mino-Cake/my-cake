@@ -81,6 +81,15 @@
     .copyright{max-width:1120px;margin:42px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,.2);font:10px Arial,sans-serif;color:#e5cfd6;text-align:center}
     .floating-wa{position:fixed;right:20px;bottom:20px;z-index:30;background:#278b59;color:#fff;border-radius:999px;padding:14px 19px;font:12px Arial,sans-serif;box-shadow:0 8px 25px #0002}
     .floating-wa:hover{background:#1d7047}
+    /* === VIDEO MODAL === */
+    .video-modal{position:fixed;inset:0;z-index:100;background:rgba(30,20,24,.92);display:none;place-items:center;padding:20px}
+    .video-modal.active{display:grid}
+    .video-modal-inner{position:relative;width:100%;max-width:900px}
+    .video-close{position:absolute;top:-46px;right:0;background:rgba(255,255,255,.15);color:white;border:0;width:40px;height:40px;border-radius:999px;font-size:20px;cursor:pointer;transition:.2s;display:grid;place-items:center}
+    .video-close:hover{background:rgba(255,255,255,.3)}
+    .video-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:14px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+    .video-wrap video{width:100%;height:100%;display:block}
+    @media(max-width:620px){.video-close{top:-40px}}
     @media(max-width:900px){.products{grid-template-columns:repeat(2,1fr)}.about-grid{gap:35px}.nav-links{gap:13px}}
     @media(max-width:620px){
       .nav-inner{padding:12px 16px}.nav-links{display:none}.brand{font-size:1.2rem}
@@ -106,15 +115,15 @@
 
   <main>
     <section class="hero" id="home" style="padding:0">
-      <video autoplay muted loop playsinline poster="assets/midi-custom.jpg">
-        <source src="assets/mino-brand-video.mp4" type="video/mp4">
-        Browser kamu tidak mendukung video.
-      </video>
+      <img src="assets/midi-custom.jpg" alt="MINO CAKE brand background" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
       <div class="hero-content">
         <div class="eyebrow">A little cake, a lot of love</div>
         <h1>MINO<br>CAKE</h1>
         <p>Little cakes, lovely designs, and sweet moments made just for you.</p>
-        <a class="btn btn-light" href="#menu">DISCOVER OUR MENU</a>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+          <a class="btn btn-light" href="#menu">DISCOVER OUR MENU</a>
+          <button class="btn btn-light" id="hero-video-btn" type="button" style="background:white;color:var(--deep);border:1px solid var(--deep)">▶ WATCH OUR STORY</button>
+        </div>
       </div>
     </section>
 
@@ -127,6 +136,7 @@
           <p>Little cakes, lovely design, and sweet moments made just for you.</p>
           <p>Di MINO CAKE, setiap kue dibuat untuk menjadi bagian dari momen spesialmu. Mulai dari hadiah kecil, perayaan ulang tahun, hingga kejutan manis untuk orang tersayang — pilih kue favoritmu dan buat desainnya sesuai cerita versimu.</p>
           <div class="signature">Made with love, just for you ♡</div>
+          <button class="btn" id="about-video-btn" type="button" style="margin-top:24px;background:var(--rose)">▶ Tonton Video Brand</button>
         </div>
       </div>
     </section>
@@ -144,7 +154,7 @@
             <div class="product-info"><h3>Midi Mousse</h3><p>Perpaduan rasa matcha, chocolate, dan tiramisu dalam satu pilihan cake yang lembut dan istimewa.</p><div class="price">Rp43.000</div><a class="btn order-link" data-item="Midi Mousse — Rp43.000" href="#">PESAN SEKARANG</a></div>
           </article>
           <article class="product">
-            <img src="assets/bento-cake.jpg" alt="Bento cake custom MINO CAKE">
+            <img src="assets/bento cake.jpg" alt="Bento cake custom MINO CAKE">
             <div class="product-info"><h3>Bento Cake</h3><p>Kue mini dengan desain custom sesuai keinginanmu. Cocok untuk hadiah dan perayaan sederhana yang berkesan.</p><div class="price">Rp38.000</div><a class="btn order-link" data-item="Bento Cake — Rp38.000" href="#">PESAN SEKARANG</a></div>
           </article>
           <article class="product">
@@ -211,6 +221,20 @@
   </footer>
 
   <a class="floating-wa sans" href="https://wa.me/6281331694738?text=Halo%20MINO%20CAKE%2C%20saya%20ingin%20memesan%20cake." target="_blank" rel="noopener">Chat WhatsApp ↗</a>
+
+  <!-- ===== VIDEO MODAL (muncul saat tombol di-klik) ===== -->
+  <div class="video-modal" id="brandVideoModal" role="dialog" aria-modal="true" aria-label="Video brand MINO CAKE">
+    <div class="video-modal-inner">
+      <button class="video-close" id="videoCloseBtn" aria-label="Tutup video">×</button>
+      <div class="video-wrap">
+        <video id="brandVideo" controls playsinline preload="metadata" poster="assets/midi-custom.jpg">
+          <source src="assets/mino-brand-video.MP4" type="video/mp4">
+          Browser kamu tidak mendukung pemutaran video.
+        </video>
+      </div>
+    </div>
+  </div>
+
   <script>
     const waNumber = "6281331694738";
     document.querySelectorAll(".order-link").forEach(link => {
@@ -221,6 +245,39 @@
       link.rel = "noopener";
     });
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    // === VIDEO MODAL ===
+    const videoModal = document.getElementById("brandVideoModal");
+    const brandVideo = document.getElementById("brandVideo");
+    const videoCloseBtn = document.getElementById("videoCloseBtn");
+
+    function openVideo() {
+      videoModal.classList.add("active");
+      document.body.style.overflow = "hidden";
+      const playPromise = brandVideo.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(() => {
+          brandVideo.muted = true;
+          brandVideo.play().catch(() => {});
+        });
+      }
+    }
+    function closeVideo() {
+      brandVideo.pause();
+      brandVideo.currentTime = 0;
+      videoModal.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+
+    document.getElementById("hero-video-btn").addEventListener("click", openVideo);
+    document.getElementById("about-video-btn").addEventListener("click", openVideo);
+    videoCloseBtn.addEventListener("click", closeVideo);
+    videoModal.addEventListener("click", (e) => {
+      if (e.target === videoModal) closeVideo();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && videoModal.classList.contains("active")) closeVideo();
+    });
   </script>
 </body>
 </html>
