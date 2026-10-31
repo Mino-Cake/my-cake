@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#fff6f7" />
+  <meta name="description" content="Minocake — homemade cakes, made with love." />
+  <title>Minocake | Cakes Made With Love</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root{--pink:#e9a9bc;--pink2:#f8dce4;--cream:#fff9f5;--ink:#49363d;--muted:#8b737b;--green:#718b70;--white:#fff;--shadow:0 16px 45px #6b3c4b18}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font-family:"DM Sans",sans-serif}a{color:inherit;text-decoration:none}button,input,select{font:inherit}
+    .nav{position:absolute;z-index:5;top:0;left:0;width:100%;display:flex;align-items:center;justify-content:space-between;padding:22px 7%;color:#fff}
+    .brand{font-family:"Playfair Display",serif;font-size:1.8rem;letter-spacing:1px}.navlinks{display:flex;gap:24px;font-size:.9rem}.navlinks a:hover{color:#ffe3eb}
+    .hero{min-height:680px;height:92vh;max-height:850px;position:relative;display:grid;place-items:center;text-align:center;color:#fff;overflow:hidden;background:#74515d}
+    .hero video{position:absolute;width:100%;height:100%;object-fit:cover;inset:0}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#2b182b99,#301b2b55)}
+    .hero-content{position:relative;z-index:1;padding:25px;max-width:780px}.eyebrow{text-transform:uppercase;letter-spacing:4px;font-size:.75rem}.hero h1{font:700 clamp(3.5rem,9vw,7rem)/1 "Playfair Display",serif;margin:18px 0}.hero p{font-size:1.08rem;max-width:570px;margin:0 auto 28px;line-height:1.8}
+    .btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:999px;padding:13px 23px;background:var(--pink);color:#fff;font-weight:700;cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-2px);filter:brightness(.97)}.btn.outline{background:transparent;border:1px solid #fff;color:#fff}.btn.dark{background:var(--ink)}.btn.small{padding:9px 15px;font-size:.85rem}
+    section{padding:82px 7%}.section-head{text-align:center;max-width:650px;margin:0 auto 38px}.kicker{color:#bd7f95;text-transform:uppercase;letter-spacing:3px;font-size:.72rem;font-weight:700}.section-head h2{font:700 clamp(2rem,5vw,3rem) "Playfair Display",serif;margin:10px 0}.section-head p{color:var(--muted);line-height:1.7}
+    .about{display:grid;grid-template-columns:1fr 1fr;gap:55px;align-items:center;background:#fff}.about-art{min-height:330px;border-radius:28px;background:linear-gradient(135deg,#f6dce4,#fdf1e9);display:grid;place-items:center;font-size:6rem}.about-copy h2{font:700 2.6rem "Playfair Display",serif}.about-copy p{color:var(--muted);line-height:1.9}
+    .catalog{background:var(--cream)}.products{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}.product{background:#fff;border-radius:22px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}.product img{width:100%;height:260px;object-fit:cover}.product-body{padding:19px;display:flex;flex-direction:column;flex:1}.product h3{font:700 1.25rem "Playfair Display",serif;margin:0 0 8px}.product p{color:var(--muted);font-size:.9rem;line-height:1.6;margin:0 0 14px;flex:1}.product .price{font-weight:700;color:#bd7f95;margin-bottom:13px}
+    .promo{background:#f8e6eb}.promo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.promo-card{background:#fff;padding:28px;border-radius:24px;text-align:center;box-shadow:var(--shadow)}.promo-card .number{font:700 2.8rem "Playfair Display",serif;color:#c17f96}.promo-card h3{margin:8px 0}.promo-card p{color:var(--muted);line-height:1.6;font-size:.9rem}.note{text-align:center;color:var(--muted);font-size:.85rem;margin-top:22px}
+    .order{background:#fff;text-align:center}.order-box{max-width:700px;margin:auto;background:#fff8f5;padding:35px;border-radius:28px}.order-box p{color:var(--muted);line-height:1.7}.socials{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:22px}.social{padding:11px 18px;border:1px solid #e9cbd5;border-radius:99px;color:#986477;font-weight:600}
+    footer{padding:28px 7%;text-align:center;background:#49363d;color:#f9e8ed;font-size:.85rem}
+    .seller-area{background:#f5eef0;padding-top:55px}.seller-toggle{display:flex;justify-content:center}.dashboard{display:none;max-width:1150px;margin:30px auto 0;background:#fff;padding:25px;border-radius:22px;box-shadow:var(--shadow)}.dashboard.show{display:block}.dash-head{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}.dash-head h2{font:700 2rem "Playfair Display",serif;margin:0}.config-note{background:#fff4d9;padding:13px 16px;border-radius:12px;color:#765b2e;font-size:.88rem;line-height:1.6;margin:15px 0}.login{max-width:420px;margin:25px auto;padding:22px;border:1px solid #f0dce3;border-radius:16px}.login input,.order-form input,.order-form select{width:100%;padding:12px 14px;border:1px solid #e8d5dc;border-radius:10px;margin:7px 0 13px;background:#fff}.login label,.order-form label{font-size:.85rem;font-weight:700}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:22px 0}.stat{background:#fff7f9;border-radius:15px;padding:17px}.stat small{color:var(--muted)}.stat strong{display:block;font-size:1.35rem;margin-top:7px}.filters{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.filters input,.filters select{padding:10px;border:1px solid #e8d5dc;border-radius:9px}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:650px}th,td{text-align:left;padding:12px;border-bottom:1px solid #f0e5e9;font-size:.88rem}th{color:#916777;background:#fff8fa}.status{padding:5px 9px;border-radius:99px;background:#fff0d3;font-size:.76rem}.status.paid{background:#e2f2e5;color:#397348}.dash-section{margin-top:28px}.dash-section h3{font:700 1.3rem "Playfair Display",serif}.muted{color:var(--muted)}.order-form{max-width:520px;margin:20px auto;text-align:left}.order-form button{width:100%}.hidden{display:none!important}
+    @media(max-width:900px){.products{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.about{gap:25px}}
+    @media(max-width:600px){.nav{padding:17px 5%}.navlinks{gap:12px;font-size:.75rem}.navlinks a:nth-child(2),.navlinks a:nth-child(3){display:none}.hero{height:78vh;min-height:570px}.about{grid-template-columns:1fr}.about-art{min-height:220px}.products{grid-template-columns:1fr 1fr;gap:12px}.product img{height:170px}.product-body{padding:13px}.product h3{font-size:1rem}.promo-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}section{padding:65px 5%}.dashboard{padding:15px}.dash-head h2{font-size:1.5rem}}
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="#">Minocake</a>
+    <nav class="navlinks"><a href="#about">Tentang</a><a href="#menu">Menu</a><a href="#promo">Promo</a><a href="#order">Pesan</a></nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <video autoplay muted loop playsinline poster="assets/midi-mousse.jpeg">
+        <source src="assets/minocake-bg.mp4" type="video/mp4">
+      </video>
+      <div class="hero-content">
+        <div class="eyebrow">Homemade cake • Made with love</div>
+        <h1>Minocake</h1>
+        <p>Little cakes, big happiness. Hadirkan momen spesial dengan kue cantik yang dibuat penuh perhatian dan bisa disesuaikan dengan ceritamu.</p>
+        <a class="btn" href="#menu">Lihat katalog</a>
+        <a class="btn outline" href="#order">Pesan sekarang</a>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="about-art" aria-label="Ilustrasi kue">🎂</div>
+      <div class="about-copy">
+        <div class="kicker">A little story</div>
+        <h2>Sweet moments start here.</h2>
+        <p>Minocake adalah bakery rumahan yang menghadirkan aneka kue untuk merayakan ulang tahun, hari spesial, maupun hadiah sederhana untuk orang tersayang. Kami percaya setiap kue punya cerita—mulai dari pilihan rasa, warna, hingga dekorasi yang kamu inginkan.</p>
+        <p>Ingin desain khusus? Ceritakan ide dan referensimu saat melakukan pemesanan melalui WhatsApp.</p>
+      </div>
+    </section>
+
+    <section class="catalog" id="menu">
+      <div class="section-head"><div class="kicker">Our collection</div><h2>Menu Minocake</h2><p>Pilih kue favoritmu. Untuk harga dan ketersediaan, silakan konfirmasi melalui WhatsApp.</p></div>
+      <div class="products">
+        <article class="product">
+          <img src="assets/midi-mousse.jpeg" alt="Midi Mousse Minocake">
+          <div class="product-body"><h3>Midi Mousse</h3><p>Kue mousse lembut dengan tampilan cantik dan topping yang menggugah selera.</p><div class="price">Harga: konfirmasi via WhatsApp</div><button class="btn small" onclick="chooseProduct('Midi Mousse')">Pesan menu ini</button></div>
+        </article>
+        <article class="product">
+          <img src="assets/midi-butterfly.jpeg" alt="Midi Butterfly Minocake">
+          <div class="product-body"><h3>Midi Butterfly</h3><p>Midi cake bernuansa manis dengan dekorasi kupu-kupu yang elegan.</p><div class="price">Harga: konfirmasi via WhatsApp</div><button class="btn small" onclick="chooseProduct('Midi Butterfly')">Pesan menu ini</button></div>
+        </article>
+        <article class="product">
+          <img src="assets/bento-cake.jpeg" alt="Bento Cake Minocake">
+          <div class="product-body"><h3>Bento Cake</h3><p>Kue mungil untuk kejutan sederhana, lengkap dengan tulisan dan dekorasi pilihan.</p><div class="price">Harga: konfirmasi via WhatsApp</div><button class="btn small" onclick="chooseProduct('Bento Cake')">Pesan menu ini</button></div>
+        </article>
+        <article class="product">
+          <img src="assets/midi-custom.jpeg" alt="Midi Custom Minocake">
+          <div class="product-body"><h3>Midi Custom</h3><p>Desain personal sesuai tema, warna, dan ucapan yang kamu inginkan.</p><div class="price">Harga: mulai dari 38 ribu*</div><button class="btn small" onclick="chooseProduct('Midi Custom')">Pesan menu ini</button></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="promo" id="promo">
+      <div class="section-head"><div class="kicker">Special offer</div><h2>Paket Bundling</h2><p>Lebih banyak kue, lebih banyak momen manis.</p></div>
+      <div class="promo-grid">
+        <div class="promo-card"><div class="number">38</div><h3>1 Custom Cake</h3><p>Harga mulai dari Rp38.000</p></div>
+        <div class="promo-card"><div class="number">73</div><h3>Bundle 2</h3><p>2 custom cake hanya Rp73.000</p></div>
+        <div class="promo-card"><div class="number">108</div><h3>Bundle 3</h3><p>3 custom cake hanya Rp108.000</p></div>
+      </div>
+      <p class="note">*Harga dalam ribuan rupiah. Paket mengikuti ketentuan desain/ukuran yang disepakati. Konfirmasi detail dan ketersediaan sebelum pembayaran.</p>
+    </section>
+
+    <section class="order" id="order">
+      <div class="section-head"><div class="kicker">Let's celebrate</div><h2>Pesan kue favoritmu</h2><p>Isi detail pesanan di bawah untuk membuat ringkasan pesanan. Pesanan akan diteruskan ke WhatsApp Minocake.</p></div>
+      <div class="order-box">
+        <form class="order-form" id="orderForm">
+          <label for="customer">Nama pemesan</label><input id="customer" required placeholder="Nama kamu">
+          <label for="phone">Nomor WhatsApp</label><input id="phone" required placeholder="08xxxxxxxxxx">
+          <label for="product">Pilih menu</label>
+          <select id="product" required>
+            <option value="">Pilih produk</option><option>Midi Mousse</option><option>Midi Butterfly</option><option>Bento Cake</option><option>Midi Custom</option>
+          </select>
+          <label for="qty">Jumlah</label><input id="qty" type="number" min="1" value="1" required>
+          <label for="detail">Detail desain / ucapan</label><input id="detail" placeholder="Warna, tema, tulisan pada kue...">
+          <button class="btn dark" type="submit">Lanjutkan ke WhatsApp</button>
+        </form>
+        <p>Atau hubungi kami langsung melalui WhatsApp.</p>
+        <a class="btn" href="https://wa.me/621331694738?text=Halo%20Minocake%2C%20saya%20ingin%20bertanya%20tentang%20pemesanan%20kue." target="_blank" rel="noopener">Chat WhatsApp</a>
+        <div class="socials">
+          <a class="social" href="https://www.instagram.com/mino_cake11/" target="_blank" rel="noopener">Instagram @mino_cake11</a>
+          <a class="social" href="https://www.tiktok.com/@minocake11" target="_blank" rel="noopener">TikTok @minocake11</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="seller-area" id="seller">
+      <div class="section-head"><div class="kicker">Private area</div><h2>Dashboard Penjual</h2><p>Area ini khusus pemilik Minocake. Masuk menggunakan akun penjual yang sudah didaftarkan di Supabase.</p></div>
+      <div class="seller-toggle"><button class="btn dark" id="showLogin">Masuk dashboard penjual</button></div>
+      <div class="dashboard" id="dashboard">
+        <div class="dash-head"><h2>Ringkasan Penjualan</h2><button class="btn small" id="logoutBtn">Keluar</button></div>
+        <div id="dashMessage" class="muted">Memuat data…</div>
+        <div id="dashContent" class="hidden">
+          <div class="stats">
+            <div class="stat"><small>Omzet dibayar (periode)</small><strong id="revenue">Rp0</strong></div>
+            <div class="stat"><small>Pesanan dibayar</small><strong id="paidCount">0</strong></div>
+            <div class="stat"><small>Pesanan menunggu</small><strong id="pendingCount">0</strong></div>
+            <div class="stat"><small>Produk terlaris</small><strong id="bestSeller">—</strong></div>
+          </div>
+          <div class="filters"><input type="date" id="fromDate"><input type="date" id="toDate"><button class="btn small" id="filterBtn">Terapkan</button><button class="btn small" id="monthBtn">Bulan ini</button></div>
+          <div class="dash-section"><h3>Laporan penjualan harian</h3><div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Jumlah transaksi dibayar</th><th>Omzet</th></tr></thead><tbody id="dailyRows"></tbody></table></div></div>
+          <div class="dash-section"><h3>Laporan penjualan bulanan</h3><div class="table-wrap"><table><thead><tr><th>Bulan</th><th>Jumlah transaksi dibayar</th><th>Omzet</th></tr></thead><tbody id="monthlyRows"></tbody></table></div></div>
+          <div class="dash-section"><h3>Riwayat transaksi</h3><div class="table-wrap"><table><thead><tr><th>Waktu</th><th>Pemesan</th><th>Produk</th><th>Total</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="transactionRows"></tbody></table></div></div>
+          <p class="muted">Omzet dihitung dari pesanan berstatus <b>paid</b> saja. Tandai pesanan sebagai dibayar setelah pembayaran benar-benar diterima.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>© <span id="year"></span> Minocake · Homemade cakes, made with love.</footer>
+
+<script>
+  // Isi dua nilai ini setelah membuat project Supabase. Jangan pernah menaruh service_role key di website.
+  const SUPABASE_URL = "MASUKKAN_SUPABASE_PROJECT_URL";
+  const SUPABASE_ANON_KEY = "MASUKKAN_SUPABASE_ANON_KEY";
+  const WA_NUMBER = "621331694738";
+  const hasSupabaseConfig = SUPABASE_URL.startsWith("https://") && !SUPABASE_URL.includes("MASUKKAN_") && !SUPABASE_ANON_KEY.includes("MASUKKAN_");
+  const db = hasSupabaseConfig ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+  const rupiah = n => new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n||0));
+  const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  function chooseProduct(name){document.getElementById("product").value=name;document.getElementById("order").scrollIntoView({behavior:"smooth"});}
+  document.getElementById("orderForm").addEventListener("submit", async e=>{
+    e.preventDefault();
+    const customer=document.getElementById("customer").value.trim(), phone=document.getElementById("phone").value.trim();
+    const product=document.getElementById("product").value, qty=Math.max(1,Number(document.getElementById("qty").value||1));
+    const detail=document.getElementById("detail").value.trim();
+    const source=new URLSearchParams(location.search).get("source")==="qr"?"qr":"website";
+    let reference="Belum tersambung ke database";
+    if(db){
+      try{
+        const {data,error}=await db.rpc("create_minocake_order",{p_customer_name:customer,p_customer_phone:phone,p_items:[{product_name:product,quantity:qty}],p_notes:detail,p_source:source});
+        if(error) throw error;
+        reference=data;
+      }catch(err){console.error(err);alert("Pesanan belum tercatat di database. Silakan lanjutkan chat WhatsApp dan hubungi penjual.");}
+    }
+    const msg=`Halo Minocake, saya ingin memesan:%0A%0ANama: ${encodeURIComponent(customer)}%0ANo. WA: ${encodeURIComponent(phone)}%0AMenu: ${encodeURIComponent(product)}%0AJumlah: ${qty}%0ADetail: ${encodeURIComponent(detail||"-")}%0AReferensi: ${encodeURIComponent(reference)}`;
+    window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`,"_blank","noopener");
+  });
+
+  const dashboard=document.getElementById("dashboard");
+  document.getElementById("showLogin").addEventListener("click",()=>{
+    dashboard.classList.toggle("show");
+    if(!db){document.getElementById("dashMessage").innerHTML='Database belum dikonfigurasi. Isi SUPABASE_URL dan SUPABASE_ANON_KEY di bagian JavaScript, lalu jalankan SQL pada file <b>supabase-setup.sql</b>.';return;}
+    showLogin();
+  });
+  function showLogin(){
+    document.getElementById("dashMessage").innerHTML=`
+      <form class="login" id="loginForm"><h3>Login penjual</h3>
+      <label>Email</label><input id="sellerEmail" type="email" required placeholder="email penjual">
+      <label>Password</label><input id="sellerPassword" type="password" required placeholder="Password">
+      <button class="btn dark" type="submit">Masuk</button><p class="muted">Hanya akun yang memiliki role seller yang dapat membuka laporan.</p></form>`;
+    document.getElementById("loginForm").addEventListener("submit",async e=>{
+      e.preventDefault();
+      const {error}=await db.auth.signInWithPassword({email:document.getElementById("sellerEmail").value,password:document.getElementById("sellerPassword").value});
+      if(error){document.getElementById("dashMessage").textContent="Login gagal: "+error.message;return;}
+      await loadDashboard();
+    });
+  }
+  document.getElementById("logoutBtn").addEventListener("click",async()=>{if(db)await db.auth.signOut();document.getElementById("dashContent").classList.add("hidden");showLogin();});
+  async function sellerCheck(){
+    const {data:{user}}=await db.auth.getUser();
+    if(!user)return false;
+    const {data,error}=await db.from("seller_profiles").select("user_id").eq("user_id",user.id).maybeSingle();
+    return !error && !!data;
+  }
+  async function loadDashboard(){
+    document.getElementById("dashMessage").textContent="Memeriksa akses penjual…";
+    if(!(await sellerCheck())){await db.auth.signOut();document.getElementById("dashMessage").textContent="Akses ditolak. Akun ini belum terdaftar sebagai penjual.";return;}
+    document.getElementById("dashMessage").textContent="";
+    document.getElementById("dashContent").classList.remove("hidden");
+    const now=new Date(), first=new Date(now.getFullYear(),now.getMonth(),1);
+    document.getElementById("fromDate").value=first.toISOString().slice(0,10);
+    document.getElementById("toDate").value=now.toISOString().slice(0,10);
+    await refreshReports();
+  }
+  document.getElementById("filterBtn").addEventListener("click",refreshReports);
+  document.getElementById("monthBtn").addEventListener("click",()=>{
+    const n=new Date();document.getElementById("fromDate").value=new Date(n.getFullYear(),n.getMonth(),1).toISOString().slice(0,10);
+    document.getElementById("toDate").value=n.toISOString().slice(0,10);refreshReports();
+  });
+  async function refreshReports(){
+    if(!db)return;
+    const from=document.getElementById("fromDate").value, to=document.getElementById("toDate").value;
+    const {data:orders,error}=await db.from("sales_orders").select("id,created_at,customer_name,customer_phone,total_amount,status,source,sales_order_items(product_name,quantity)").gte("created_at",from+"T00:00:00").lte("created_at",to+"T23:59:59").order("created_at",{ascending:false});
+    if(error){document.getElementById("dashMessage").textContent="Gagal mengambil laporan: "+error.message;return;}
+    const paid=orders.filter(o=>o.status==="paid"), revenue=paid.reduce((s,o)=>s+Number(o.total_amount),0);
+    document.getElementById("revenue").textContent=rupiah(revenue);
+    document.getElementById("paidCount").textContent=paid.length;
+    document.getElementById("pendingCount").textContent=orders.filter(o=>o.status==="pending").length;
+    const products={};paid.forEach(o=>(o.sales_order_items||[]).forEach(i=>products[i.product_name]=(products[i.product_name]||0)+Number(i.quantity)));
+    const best=Object.entries(products).sort((a,b)=>b[1]-a[1])[0];
+    document.getElementById("bestSeller").textContent=best?`${best[0]} (${best[1]})`:"—";
+    const daily={},monthly={};
+    paid.forEach(o=>{const d=new Date(o.created_at),day=d.toLocaleDateString("id-ID"),month=d.toLocaleDateString("id-ID",{month:"long",year:"numeric"});daily[day]??={count:0,total:0};daily[day].count++;daily[day].total+=Number(o.total_amount);monthly[month]??={count:0,total:0};monthly[month].count++;monthly[month].total+=Number(o.total_amount);});
+    document.getElementById("dailyRows").innerHTML=Object.entries(daily).map(([d,v])=>`<tr><td>${esc(d)}</td><td>${v.count}</td><td>${rupiah(v.total)}</td></tr>`).join("")||'<tr><td colspan="3">Belum ada transaksi dibayar.</td></tr>';
+    document.getElementById("monthlyRows").innerHTML=Object.entries(monthly).map(([m,v])=>`<tr><td>${esc(m)}</td><td>${v.count}</td><td>${rupiah(v.total)}</td></tr>`).join("")||'<tr><td colspan="3">Belum ada transaksi dibayar.</td></tr>';
+    document.getElementById("transactionRows").innerHTML=orders.map(o=>{
+      const items=(o.sales_order_items||[]).map(i=>`${esc(i.product_name)} × ${i.quantity}`).join(", ");
+      const action=o.status==="pending"?`<button class="btn small" onclick="markPaid('${o.id}')">Tandai dibayar</button>`:"—";
+      return `<tr><td>${new Date(o.created_at).toLocaleString("id-ID")}</td><td>${esc(o.customer_name)}<br><small>${esc(o.customer_phone||"")}</small></td><td>${items}</td><td>${rupiah(o.total_amount)}</td><td><span class="status ${o.status==="paid"?"paid":""}">${esc(o.status)}</span></td><td>${action}</td></tr>`;
+    }).join("")||'<tr><td colspan="6">Belum ada transaksi.</td></tr>';
+  }
+  async function markPaid(id){
+    if(!confirm("Konfirmasi bahwa pembayaran pesanan ini sudah diterima?"))return;
+    const {error}=await db.from("sales_orders").update({status:"paid",paid_at:new Date().toISOString()}).eq("id",id);
+    if(error){alert("Tidak dapat memperbarui status: "+error.message);return;}await refreshReports();
+  }
+  window.markPaid=markPaid;
+  if(db){db.auth.getSession().then(({data})=>{if(data.session){dashboard.classList.add("show");loadDashboard();}});}
+</script>
+</body>
+</html>
